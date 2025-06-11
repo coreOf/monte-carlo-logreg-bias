@@ -1,9 +1,11 @@
 %LET SEED = 1235;
 %LET NREP = 1000;
 
-%LET N =  50;
-/* %LET N = 100; */
-/* %LET N = 200; */
+%LET N =  50 100 200;
+
+/* REGRESSION COEFS */
+%LET BETA_10 =  3; %LET BETA_11 = -3;
+%LET BETA_20 =  4; %LET BETA_21 = -2; %LET BETA_22 = -2;
 
 /* N(0,1) */
 %LET MU    = 0;
@@ -64,9 +66,4 @@ DATA UNIFORM;
 	END;
 RUN;
 
-/* REGRESSION COEFS */
-%LET BETA_10 =  3;
-%LET BETA_11 = -3;
-%LET BETA_20 =  4;
-%LET BETA_21 = -2;
-%LET BETA_22 = -2;
+
