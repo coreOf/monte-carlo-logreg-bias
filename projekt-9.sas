@@ -1,0 +1,72 @@
+%LET SEED = 1235;
+%LET NREP = 1000;
+
+%LET N =  50;
+/* %LET N = 100; */
+/* %LET N = 200; */
+
+/* N(0,1) */
+%LET MU    = 0;
+%LET SIGMA = 1;
+
+DATA NORMAL;
+	CALL STREAMINIT(&SEED);
+	DO REP = 1 TO &NREP;
+	DO I = 1 TO &N;
+		X_NORM = &SIGMA * RAND ("NORM") + &MU;
+		OUTPUT;
+	END;
+	END;
+RUN;
+
+/* GAMMA */
+%LET SHAPE = 0.5;
+
+DATA GAMMA;
+	CALL STREAMINIT(&SEED);
+	DO REP = 1 TO &NREP;
+	DO I = 1 TO &N;
+		X_GAM = RAND ("GAMMA", &SHAPE) - &SHAPE; /* CENTERING, E(GAMMA(SHAPE, 1)) = SHAPE */
+		OUTPUT;
+	END;
+	END;
+RUN;
+
+/* 0.9 N(0, 2) & 0.1 N(20, 5)  */
+%LET MU_1    =  0; %LET SIGMA_1 =  2;
+%LET MU_2    = 20; %LET SIGMA_2 =  5;
+%LET RATIO = 0.9;
+
+DATA CONTAMINATED_NORMAL;
+	CALL STREAMINIT(&SEED);
+	DO REP = 1 TO &NREP;
+	DO I = 1 TO &N;
+		IF I <= &RATIO*&N THEN
+			X_CONTNORM = &SIGMA_1 * RAND ("NORM") + &MU_1;
+		ELSE
+			X_CONTNORM = &SIGMA_2 * RAND ("NORM") + &MU_2;
+		OUTPUT;
+	END;
+	END;
+RUN;
+
+/* UNIFORM(-5, 5) */
+%LET A = -5;
+%LET B =  5;
+
+DATA UNIFORM;
+	CALL STREAMINIT(&SEED);
+	DO REP = 1 TO &NREP;
+	DO I = 1 TO &N;
+		X_UNI = RAND ("UNIFORM", &A, &B);
+		OUTPUT;
+	END;
+	END;
+RUN;
+
+/* REGRESSION COEFS */
+%LET BETA_10 =  3;
+%LET BETA_11 = -3;
+%LET BETA_20 =  4;
+%LET BETA_21 = -2;
+%LET BETA_22 = -2;
